@@ -17,7 +17,6 @@
         input { width: 100%; padding: 18px; border: 1.5px solid #ddd; border-radius: 12px; font-size: 18px; text-align: center; box-sizing: border-box; margin-bottom: 15px; font-weight: bold; background: #fdfdfd; outline: none; }
         button.btn-search { width: 100%; padding: 18px; background-color: var(--primary-color); color: white; border: none; border-radius: 12px; font-size: 19px; font-weight: bold; cursor: pointer; }
         
-        /* تصميم أداة التحميل */
         .loader { display: none; border: 5px solid #f3f3f3; border-top: 5px solid var(--primary-color); border-radius: 50%; width: 45px; height: 45px; animation: spin 1s linear infinite; margin: 20px auto; }
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
 
@@ -73,6 +72,10 @@
 
 <script>
 const applicantsData = [
+    { id: "NORAS-KW-59987", name: "سناء أحمد خليل علي", inst: "مدرسه عبدالله جابر المبارك الصباح الثانوية بنين" },
+    { id: "NORAS-KW-50653", name: "لبنى عوض عبدالرحمن بابكر", inst: "مدرسة البيان الثانوية بنات" },
+    { id: "NORAS-KW-89308", name: "محمد الامين عزالدين محمد على إبراهيم", inst: "مدرسة عبدالله جابر المبارك الصباح الثانوية" },
+    { id: "NORAS-KW-51212", name: "نفيسة مامون عبدالماجد", inst: "مدرسة البيان الثانوية بنات" },
     { id: "NORAS-KW-10443", name: "عبدالرحمن حامد عبدالرحمن محمد", inst: "مدرسة البيان الثانوية بنات" },
     { id: "NORAS-KW-96271", name: "ابوذر ابراهيم احمد امين", inst: "مدرسة عبدالله جابر المبارك الصباح الثانوية" },
     { id: "NORAS-KW-24676", name: "يونس عثمان ادم هارون", inst: "مدرسة عبدالله جابر المبارك الصباح الثانوية" },
@@ -90,21 +93,15 @@ function search() {
     const noDataBox = document.getElementById('noDataBox');
     const loader = document.getElementById('loader');
 
-    // إخفاء كل شيء وبدء التحميل
     resultBox.style.display = "none";
     noDataBox.style.display = "none";
-    
-    if (!userInput || userNumbers === "") { 
-        alert("يرجى إدخال رقم المعاملة");
-        return; 
-    }
+
+    if (!userInput || userNumbers === "") { return; }
 
     loader.style.display = "block";
 
-    // محاكاة وقت التحميل (1.2 ثانية) كما في الكود الأصلي
     setTimeout(() => {
         loader.style.display = "none";
-        
         const person = applicantsData.find(p => {
             const dataNumbers = p.id.replace(/\D/g, ''); 
             return dataNumbers === userNumbers;
