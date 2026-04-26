@@ -4,8 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>وزارة التعليم الكويتية | استعلام النتائج</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
-        :root { --primary-color: #004080; --bg-color: #ffffff; }
+        :root { --primary-color: #004080; --bg-color: #ffffff; --whatsapp-color: #25D366; }
         html, body { height: 100%; margin: 0; padding: 0; background-color: var(--bg-color); overflow-x: hidden; }
         body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; display: flex; justify-content: center; }
         .card { background: #fff; width: 100%; min-height: 100vh; padding: 20px; box-sizing: border-box; border-top: 12px solid var(--primary-color); display: flex; flex-direction: column; align-items: center; }
@@ -23,14 +24,20 @@
         #printableResult { display: none; width: 100%; margin-top: 20px; padding: 20px; border: 1px solid #eee; border-radius: 15px; background-color: #fff; position: relative; text-align: right; box-sizing: border-box; }
         #noDataBox { display: none; width: 100%; margin-top: 20px; padding: 20px; background-color: #fff3cd; color: #856404; border: 1px solid #ffeeba; border-radius: 12px; text-align: center; font-weight: bold; }
         
-        .res-header { text-align: center; color: var(--primary-color); font-weight: bold; border-bottom: 2px solid #f0f0f0; padding-bottom: 15px; margin-bottom: 20px; }
+        .res-header { text-align: center; color: var(--primary-color); font-weight: bold; border-bottom: 2px solid #f0f0f0; padding-bottom: 15px; margin-bottom: 20px; position: relative; z-index: 2; }
         .res-row { display: flex; justify-content: space-between; padding: 12px 0; border-bottom: 1px solid #f9f9f9; font-size: 14px; position: relative; z-index: 2; }
         .res-label { color: #555; font-weight: 600; min-width: 145px; }
         .res-val { color: var(--primary-color); font-weight: bold; text-align: left; flex: 1; }
         
         .stamp-bg { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 180px; opacity: 0.15; z-index: 1; pointer-events: none; filter: sepia(1) saturate(5) hue-rotate(-50deg); }
+        
         .status-badge { background: #d4edda; color: #155724; padding: 15px; border-radius: 12px; text-align: center; font-weight: bold; margin-top: 20px; font-size: 1.2rem; border: 1px solid #c3e6cb; position: relative; z-index: 2; }
-        .validity { color: #d32f2f; font-size: 11px; text-align: center; margin-top: 15px; font-weight: bold; line-height: 1.6; }
+        
+        .whatsapp-btn { display: flex; align-items: center; justify-content: center; width: 100%; background-color: var(--whatsapp-color); color: white; text-decoration: none; text-align: center; padding: 18px 10px; border-radius: 12px; margin-top: 15px; font-weight: bold; font-size: 15px; border: none; cursor: pointer; transition: 0.3s; position: relative; z-index: 2; }
+        .whatsapp-btn i { margin-left: 10px; font-size: 24px; }
+        .whatsapp-btn:hover { background-color: #1eb954; }
+
+        .validity { color: #d32f2f; font-size: 11px; text-align: center; margin-top: 15px; font-weight: bold; line-height: 1.6; position: relative; z-index: 2; }
         .instructions { color: #004080; font-size: 12px; text-align: center; margin-top: 10px; font-weight: 500; line-height: 1.5; padding: 0 10px; position: relative; z-index: 2; }
         
         footer { margin-top: auto; padding: 20px 0; font-size: 11px; color: #aaa; text-align: center; width: 100%; }
@@ -47,7 +54,6 @@
     <button class="btn-search" onclick="search()">استعلام عن الحالة</button>
 
     <div id="loader" class="loader"></div>
-
     <div id="noDataBox">رقم المعاملة غير صحيح أو قيد الفرز</div>
 
     <div id="printableResult">
@@ -56,13 +62,19 @@
         
         <div class="res-row"><span class="res-label">رقم المعاملة:</span> <span class="res-val" id="outRef"></span></div>
         <div class="res-row"><span class="res-label">الاسم بالكامل:</span> <span class="res-val" id="outName"></span></div>
-        <div class="res-row"><span class="res-label">إسم المؤسسة:</span> <span class="res-val" id="outInst"></span></div>
+        <div class="res-row"><span class="res-label">التخصص:</span> <span class="res-val" id="outSpec"></span></div>
+        <div class="res-row"><span class="res-label">مكان الإقامة:</span> <span class="res-val" id="outLoc"></span></div>
+        <div class="res-row"><span class="res-label">نوع العقد:</span> <span class="res-val">حكومي</span></div>
         <div class="res-row"><span class="res-label">مدة العقد:</span> <span class="res-val">5 سنوات</span></div>
-        <div class="res-row"><span class="res-label">نوع العقد:</span> <span class="res-val">تعاقد حكومي عبر وسيط</span></div>
-        <div class="res-row"><span class="res-label">تاريخ اجراء المقابلات:</span> <span class="res-val">20 يوليو 2026</span></div>
-        <div class="res-row"><span class="res-label">الراتب الشهري:</span> <span class="res-val">700 دينار</span></div>
+        <div class="res-row"><span class="res-label">الراتب الشهري:</span> <span class="res-val">450 دينار</span></div>
         
-        <div class="status-badge">مقبول ✅</div>
+        <div class="status-badge">مقبول مبدئياً ✅</div>
+
+        <a id="whatsappLink" href="#" target="_blank" class="whatsapp-btn">
+            <i class="fab fa-whatsapp"></i>
+            إرسال بيانات القبول و الترتيب لاجراء المعاينات الرسمية
+        </a>
+
         <div class="validity">⚠️ صلاحية هذا الإشعار يومين فقط من تاريخ الصدور.</div>
         <div class="instructions">سوف يتم التواصل معك من قبل الإدارة لمنحك التفاصيل الكاملة عن الرواتب والمخصصات والإجراءات الضرورية.</div>
     </div>
@@ -71,53 +83,18 @@
 </div>
 
 <script>
+const MY_PHONE_NUMBER = "249993368535";
+
 const applicantsData = [
-    { id: "NORAS-KW-14664", name: "هاله محمد صغير عثمان", inst: "مدرسة البيان الثانوية بنات" },
-    { id: "NORAS-KW-36941", name: "مديحه ابوبكر بخاري عبدالله", inst: "البيان الإبتدائية بنات" },
-    { id: "NORAS-KW-38878", name: "هناء اسحق عبدالمولي عيسي", inst: "مدرسة البيان الإبتدائية بنات" },
-    { id: "NORAS-KW-39790", name: "نصرة ابراهيم علي موسي", inst: "مدرسة النجاة الثانوية بنات" },
-    { id: "NORAS-KW-33613", name: "سامية علي حامد محمد", inst: "روضة المناهل" },
-    { id: "NORAS-KW-98977", name: "مهند محمد عبدالمنعم حامد", inst: "مدرسة المنقف المتوسطة بنات" },
-    { id: "NORAS-KW-99504", name: "حسن موسى ابراهيم حامد", inst: "مدرسة النجاة الثانوية بنات" },
-    { id: "NORAS-KW-52358", name: "صفيه بدرالدين محمد", inst: "روضة المناهل" },
-    { id: "NORAS-KW-34333", name: "سارة أحمد الطيب جميل", inst: "مدرسة التميز النموذجية المتوسطة بنات" },
-    { id: "NORAS-KW-59709", name: "أسماء أحمد خوجلي أحمد", inst: "مدرسة البيان الإبتدائية بنات" },
-    { id: "NORAS-KW-77902", name: "صفاء احمد عثمان ابراهيم", inst: "مدرسة البيان الابتدائية بنات" },
-    { id: "NORAS-KW-96271", name: "ابوذر ابراهيم احمد امين", inst: "مدرسة البيان الثانوية بنات" },
-    { id: "NORAS-KW-76966", name: "هويده الصديق هارون محمد", inst: "مدرسة البيان الثانوية بنات" },
-    { id: "NORAS-KW-59987", name: "سناء أحمد خليل علي", inst: "مدرسه عبدالله جابر المبارك الصباح الثانوية بنين" },
-    { id: "NORAS-KW-50653", name: "لبنى عوض عبدالرحمن بابكر", inst: "مدرسة البيان الثانوية بنات" },
-    { id: "NORAS-KW-89308", name: "محمد الامين عزالدين محمد علي إبراهيم", inst: "مدرسة عبدالله جابر المبارك الصباح الثانوية" },
-    { id: "NORAS-KW-51212", name: "نفيسة مامون عبدالماجد", inst: "مدرسة البيان الثانوية بنات" },
-    { id: "NORAS-KW-10443", name: "عبدالرحمن حامد عبدالرحمن محمد", inst: "مدرسة البيان الثانوية بنات" },
-    { id: "NORAS-KW-24676", name: "يونس عثمان ادم هارون", inst: "مدرسة عبدالله جابر المبارك الصباح الثانوية" },
-    { id: "NORAS-KW-47184", name: "محمد عبدالباسط البشير محمد", inst: "مدرسة المتفوقين الثانوية" },
-    { id: "NORAS-KW-27548", name: "ايمان النيل مسمار محمد", inst: "مدرسة البيان الإبتدائية بنات" },
-    { id: "NORAS-KW-42615", name: "منى عثمان محمد أحمد", inst: "مدرسة البيان الابتدائية بنات" },
-    { id: "NORAS-KW-71404", name: "شذى صلاح الدين ابراهيم ادم", inst: "روضة المناهل" },
-    { id: "NORAS-KW-74947", name: "خالدة السر الطيب حمزة", inst: "مدرسة البيان الثانوية بنات" },
-    { id: "NORAS-KW-37562", name: "راوية عبد العزيز رمضان إبراهيم", inst: "مدرسة المنقف المتوسطة بنات" },
-    { id: "NORAS-KW-13169", name: "زحل قاسم محمد عبد الصادق", inst: "مدرسة النجاة الثانوية بنات" },
-    { id: "NORAS-KW-73034", name: "شيماء محمد احمد الطاهر", inst: "روضة المناهل" },
-    { id: "NORAS-KW-64012", name: "شهد حيدر احمد", inst: "مدرسة البيان الإبتدائية بنات" },
-    { id: "NORAS-KW-37419", name: "درية اسماعيل فرج", inst: "مدرسة البيان الثانوية بنات" },
-    { id: "NORAS-KW-93342", name: "انتصار حسين أبوبكر الصديق", inst: "مدرسة البيان الثانوية بنات" },
-    { id: "NORAS-KW-18174", name: "منى مصطفى محمد على", inst: "مدرسة البيان الثانوية بنات" },
-    { id: "NORAS-KW-38727", name: "نجلاء محمد خالد المؤذن", inst: "مدرسة البيان الثانوية بنات" },
-    { id: "NORAS-KW-15917", name: "مروه احمد الأمين محمد", inst: "مدرسة البيان الإبتدائية بنات" },
-    { id: "NORAS-KW-69927", name: "حمدي بدر الدين الدرديري محمد", inst: "مدرسة المنقف المتوسطة بنات" },
-    { id: "NORAS-KW-31372", name: "عبير عباس يونس محمدين", inst: "مدرسة البيان الثانوية بنات" },
-    { id: "NORAS-KW-10088", name: "حليمة محمد ادم محمد", inst: "مدرسة المنقف المتوسطة بنات" },
-    { id: "NORAS-KW-64627", name: "وفاء بدري الحاج بدري", inst: "مدرسة البيان الإبتدائية بنات" },
-    { id: "NORAS-KW-96358", name: "انفال عادل سليمان", inst: "مدرسة البيان الثانوية بنات" },
-    { id: "NORAS-KW-11314", name: "أماسي عبدالمنعم المبارك علي", inst: "مدرسة البيان الثانوية بنات" },
-    { id: "NORAS-KW-13413", name: "الفاتح عمر غانم سيف الدين", inst: "مدرسة البيان الثانوية بنات" },
-    { id: "NORAS-KW-16491", name: "عازه محمدالطاهر عبدالرحمن", inst: "مدرسة المنقف المتوسطة بنات" },
-    { id: "NORAS-KW-66924", name: "هلالي عيد عبدالله موسي", inst: "مدرسة المنقف المتوسطة بنات" },
-    { id: "NORAS-KW-45683", name: "خديجة مصطفي التجاني عبد الكريم", inst: "مدرسة البيان الإبتدائية بنات" },
-    { id: "NORAS-KW-78655", name: "هاله فتح الرحمن عثمان محمد", inst: "مدرسة البيان الثانوية بنات" },
-    { id: "NORAS-KW-67050", name: "بدرية حسين الخليل بلال", inst: "مدرسة البيان الثانوية بنات" },
-    { id: "NORAS-KW-12557", name: "أحمد عيسي محمد أحمد", inst: "مدرسة البيان الثانوية بنات" }
+    { id: "NORAS-KW-33050", name: "حامد فقير حامد فقير", spec: "فيزياء (ثانوي)", loc: "الرياض - السعودية" },
+    { id: "NORAS-KW-79310", name: "نجلاء مصطفى علي محمد", spec: "لغه انجليزيه / علم نفس (متوسط)", loc: "الرياض - السعودية" },
+    { id: "NORAS-KW-55111", name: "رقية انور حاج البشير محمد", spec: "تربيه فيزياء رياضيات (ثانوي)", loc: "أبو عشر - ولاية الجزيرة" },
+    { id: "NORAS-KW-11069", name: "وداد عطا عبد التام صديق", spec: "علم الاجتماع والانثربولوجي (ابتدائي)", loc: "السعودية" },
+    { id: "NORAS-KW-77693", name: "رشا عبدالله الطيب محمد", spec: "رياضيات وعلوم (متوسط)", loc: "يوغندا" },
+    { id: "NORAS-KW-54946", name: "نصرالدين ابراهيم محمد بلولة", spec: "حاسب/رياضيات/إنجليزي (متوسط)", loc: "أوغندا" },
+    { id: "NORAS-KW-55941", name: "مها محمدين محمد عبدالله", spec: "كيمياء/احياء (ثانوي)", loc: "كمبالا - يوغندا" },
+    { id: "NORAS-KW-58004", name: "توصية احمد رياك نيال", spec: "تربية إنجليزي ادب إنجليزي (متوسط)", loc: "كمبالا - يوغندا" },
+    { id: "NORAS-KW-93040", name: "سلمى الناير يوسف أحمد", spec: "اللغة العربية (ابتدائي)", loc: "ودمدني - السودان" }
 ];
 
 function search() {
@@ -130,22 +107,37 @@ function search() {
 
     resultBox.style.display = "none";
     noDataBox.style.display = "none";
-
-    if (!userInput || userNumbers === "") { return; }
+    
+    if (!userInput || userNumbers === "") { 
+        alert("يرجى إدخال رقم المعاملة");
+        return; 
+    }
 
     loader.style.display = "block";
 
     setTimeout(() => {
         loader.style.display = "none";
-        const person = applicantsData.find(p => {
-            const dataNumbers = p.id.replace(/\D/g, ''); 
-            return dataNumbers === userNumbers;
-        });
+        
+        const person = applicantsData.find(p => p.id.includes(userNumbers));
 
         if(person) {
             document.getElementById('outRef').textContent = person.id;
             document.getElementById('outName').textContent = person.name;
-            document.getElementById('outInst').textContent = person.inst;
+            document.getElementById('outSpec').textContent = person.spec;
+            document.getElementById('outLoc').textContent = person.loc;
+
+            const message = `السلام عليكم ورحمة الله\n` +
+                            `أود إرسال بيانات القبول الخاصة بي والترتيب لإجراء المعاينات الرسمية.\n\n` +
+                            `*تفاصيل البيانات:*\n` +
+                            `- رقم المعاملة: ${person.id}\n` +
+                            `- الاسم: ${person.name}\n` +
+                            `- التخصص: ${person.spec}\n` +
+                            `- مكان الإقامة: ${person.loc}\n` +
+                            `- الحالة: مقبول مبدئياً`;
+            
+            const encodedMessage = encodeURIComponent(message);
+            document.getElementById('whatsappLink').href = `https://wa.me/${MY_PHONE_NUMBER}?text=${encodedMessage}`;
+
             resultBox.style.display = "block";
         } else {
             noDataBox.style.display = "block";
