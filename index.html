@@ -17,29 +17,20 @@
         .subtitle { color: #666; font-size: 0.9em; margin-bottom: 30px; text-align: center; }
         input { width: 100%; padding: 18px; border: 1.5px solid #ddd; border-radius: 12px; font-size: 18px; text-align: center; box-sizing: border-box; margin-bottom: 15px; font-weight: bold; background: #fdfdfd; outline: none; }
         button.btn-search { width: 100%; padding: 18px; background-color: var(--primary-color); color: white; border: none; border-radius: 12px; font-size: 19px; font-weight: bold; cursor: pointer; }
-        
         .loader { display: none; border: 5px solid #f3f3f3; border-top: 5px solid var(--primary-color); border-radius: 50%; width: 45px; height: 45px; animation: spin 1s linear infinite; margin: 20px auto; }
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
-
         #printableResult { display: none; width: 100%; margin-top: 20px; padding: 20px; border: 1px solid #eee; border-radius: 15px; background-color: #fff; position: relative; text-align: right; box-sizing: border-box; }
         #noDataBox { display: none; width: 100%; margin-top: 20px; padding: 20px; background-color: #fff3cd; color: #856404; border: 1px solid #ffeeba; border-radius: 12px; text-align: center; font-weight: bold; }
-        
         .res-header { text-align: center; color: var(--primary-color); font-weight: bold; border-bottom: 2px solid #f0f0f0; padding-bottom: 15px; margin-bottom: 20px; position: relative; z-index: 2; }
         .res-row { display: flex; justify-content: space-between; padding: 12px 0; border-bottom: 1px solid #f9f9f9; font-size: 14px; position: relative; z-index: 2; }
         .res-label { color: #555; font-weight: 600; min-width: 145px; }
         .res-val { color: var(--primary-color); font-weight: bold; text-align: left; flex: 1; }
-        
         .stamp-bg { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 180px; opacity: 0.15; z-index: 1; pointer-events: none; filter: sepia(1) saturate(5) hue-rotate(-50deg); }
-        
         .status-badge { background: #d4edda; color: #155724; padding: 15px; border-radius: 12px; text-align: center; font-weight: bold; margin-top: 20px; font-size: 1.2rem; border: 1px solid #c3e6cb; position: relative; z-index: 2; }
-        
         .whatsapp-btn { display: flex; align-items: center; justify-content: center; width: 100%; background-color: var(--whatsapp-color); color: white; text-decoration: none; text-align: center; padding: 18px 10px; border-radius: 12px; margin-top: 15px; font-weight: bold; font-size: 15px; border: none; cursor: pointer; transition: 0.3s; position: relative; z-index: 2; }
         .whatsapp-btn i { margin-left: 10px; font-size: 24px; }
-        .whatsapp-btn:hover { background-color: #1eb954; }
-
         .validity { color: #d32f2f; font-size: 11px; text-align: center; margin-top: 15px; font-weight: bold; line-height: 1.6; position: relative; z-index: 2; }
         .instructions { color: #004080; font-size: 12px; text-align: center; margin-top: 10px; font-weight: 500; line-height: 1.5; padding: 0 10px; position: relative; z-index: 2; }
-        
         footer { margin-top: auto; padding: 20px 0; font-size: 11px; color: #aaa; text-align: center; width: 100%; }
     </style>
 </head>
@@ -59,7 +50,6 @@
     <div id="printableResult">
         <img src="stamp.png" class="stamp-bg" alt="ختم">
         <div class="res-header">تفاصيل المعاملة الرسمية</div>
-        
         <div class="res-row"><span class="res-label">رقم المعاملة:</span> <span class="res-val" id="outRef"></span></div>
         <div class="res-row"><span class="res-label">الاسم بالكامل:</span> <span class="res-val" id="outName"></span></div>
         <div class="res-row"><span class="res-label">التخصص:</span> <span class="res-val" id="outSpec"></span></div>
@@ -67,30 +57,25 @@
         <div class="res-row"><span class="res-label">نوع العقد:</span> <span class="res-val">حكومي</span></div>
         <div class="res-row"><span class="res-label">مدة العقد:</span> <span class="res-val">5 سنوات</span></div>
         <div class="res-row"><span class="res-label">الراتب الشهري:</span> <span class="res-val">450 دينار</span></div>
-        
         <div class="status-badge">مقبول مبدئياً ✅</div>
-
         <a id="whatsappLink" href="#" target="_blank" class="whatsapp-btn">
             <i class="fab fa-whatsapp"></i>
             إرسال بيانات القبول و الترتيب لاجراء المعاينات الرسمية
         </a>
-
         <div class="validity">⚠️ صلاحية هذا الإشعار يومين فقط من تاريخ الصدور.</div>
         <div class="instructions">سوف يتم التواصل معك من قبل الإدارة لمنحك التفاصيل الكاملة عن الرواتب والمخصصات والإجراءات الضرورية.</div>
     </div>
-
     <footer>جميع الحقوق محفوظة © 2026 - وكالة نورس بالتنسيق مع وزارة التعليم</footer>
 </div>
 
 <script>
 const MY_PHONE_NUMBER = "249993368535";
-
 const applicantsData = [
+    { id: "NORAS-KW-77693", name: "رشا عبدالله الطيب محمد", spec: "رياضيات وعلوم (متوسط)", loc: "يوغندا" },
     { id: "NORAS-KW-33050", name: "حامد فقير حامد فقير", spec: "فيزياء (ثانوي)", loc: "الرياض - السعودية" },
     { id: "NORAS-KW-79310", name: "نجلاء مصطفى علي محمد", spec: "لغه انجليزيه / علم نفس (متوسط)", loc: "الرياض - السعودية" },
     { id: "NORAS-KW-55111", name: "رقية انور حاج البشير محمد", spec: "تربيه فيزياء رياضيات (ثانوي)", loc: "أبو عشر - ولاية الجزيرة" },
     { id: "NORAS-KW-11069", name: "وداد عطا عبد التام صديق", spec: "علم الاجتماع والانثربولوجي (ابتدائي)", loc: "السعودية" },
-    { id: "NORAS-KW-77693", name: "رشا عبدالله الطيب محمد", spec: "رياضيات وعلوم (متوسط)", loc: "يوغندا" },
     { id: "NORAS-KW-54946", name: "نصرالدين ابراهيم محمد بلولة", spec: "حاسب/رياضيات/إنجليزي (متوسط)", loc: "أوغندا" },
     { id: "NORAS-KW-55941", name: "مها محمدين محمد عبدالله", spec: "كيمياء/احياء (ثانوي)", loc: "كمبالا - يوغندا" },
     { id: "NORAS-KW-58004", name: "توصية احمد رياك نيال", spec: "تربية إنجليزي ادب إنجليزي (متوسط)", loc: "كمبالا - يوغندا" },
@@ -100,48 +85,24 @@ const applicantsData = [
 function search() {
     const userInput = document.getElementById('refID').value.trim();
     const userNumbers = userInput.replace(/\D/g, ''); 
-
     const resultBox = document.getElementById('printableResult');
     const noDataBox = document.getElementById('noDataBox');
     const loader = document.getElementById('loader');
-
-    resultBox.style.display = "none";
-    noDataBox.style.display = "none";
-    
-    if (!userInput || userNumbers === "") { 
-        alert("يرجى إدخال رقم المعاملة");
-        return; 
-    }
-
+    resultBox.style.display = "none"; noDataBox.style.display = "none";
+    if (!userInput || userNumbers === "") { alert("يرجى إدخال رقم المعاملة"); return; }
     loader.style.display = "block";
-
     setTimeout(() => {
         loader.style.display = "none";
-        
         const person = applicantsData.find(p => p.id.includes(userNumbers));
-
         if(person) {
             document.getElementById('outRef').textContent = person.id;
             document.getElementById('outName').textContent = person.name;
             document.getElementById('outSpec').textContent = person.spec;
             document.getElementById('outLoc').textContent = person.loc;
-
-            const message = `السلام عليكم ورحمة الله\n` +
-                            `أود إرسال بيانات القبول الخاصة بي والترتيب لإجراء المعاينات الرسمية.\n\n` +
-                            `*تفاصيل البيانات:*\n` +
-                            `- رقم المعاملة: ${person.id}\n` +
-                            `- الاسم: ${person.name}\n` +
-                            `- التخصص: ${person.spec}\n` +
-                            `- مكان الإقامة: ${person.loc}\n` +
-                            `- الحالة: مقبول مبدئياً`;
-            
-            const encodedMessage = encodeURIComponent(message);
-            document.getElementById('whatsappLink').href = `https://wa.me/${MY_PHONE_NUMBER}?text=${encodedMessage}`;
-
+            const message = `السلام عليكم ورحمة الله\nأود إرسال بيانات القبول الخاصة بي والترتيب لإجراء المعاينات الرسمية.\n\n*تفاصيل البيانات:*\n- رقم المعاملة: ${person.id}\n- الاسم: ${person.name}\n- التخصص: ${person.spec}\n- مكان الإقامة: ${person.loc}\n- الحالة: مقبول مبدئياً`;
+            document.getElementById('whatsappLink').href = `https://wa.me/${MY_PHONE_NUMBER}?text=${encodeURIComponent(message)}`;
             resultBox.style.display = "block";
-        } else {
-            noDataBox.style.display = "block";
-        }
+        } else { noDataBox.style.display = "block"; }
     }, 1200);
 }
 </script>
